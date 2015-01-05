@@ -25,11 +25,17 @@ module.exports = function init(options) {
         return {
             "^!lannistus$": function lannistus(from, matches) {
                 helpers.download('http://lannistajakuha.com/', function callback(data) {
-                    var $ = cheerio.load(data);
-                    var lannistus = $('div.lannistus p').text().trim();
+                    if (data == null) {
+                        channel.say(from, 'Oh noes did not get any data from http://lannistajakuha.com/ - Site down?');
+                    } else {
+                        var $ = cheerio.load(data);
+                        var lannistus = $('div.lannistus p').text().trim();
 
-                    if (lannistus) {
-                        channel.say(lannistus);
+                        if (lannistus) {
+                            channel.say(lannistus);
+                        } else {
+                            channel.say('Tälle päivälle ei lannistusta - höh.');
+                        }
                     }
                 });
             }
